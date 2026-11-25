@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Live demo{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Live demo. One secret, the same code on both sides</h1>
+  <p>The server and the phone share one secret key. Each side mixes the key
+     with the current time, so both produce the same six digit code.</p>
+  <p class="note">Teaching page only. A real site never shows the secret or
+     the server's code.</p>
+</div>
+
+<div class="columns">
+  <div class="card">
+    <h2>1. Shared secret</h2>
+    <img class="qr" src="{{ qr_image }}" alt="QR code for the demo account">
+    <p class="secret">{{ secret }}</p>
+    <p class="note">Scan with Google Authenticator</p>
+  </div>
+
+  <div class="card">
+    <h2>2. Server's code now</h2>
+    <div class="bigcode" id="code">------</div>
+    <div class="bar"><div id="bar"></div></div>
+    <p class="note"><span id="seconds">--</span> seconds left</p>
+    <p class="note">Wrong codes in a row <strong id="fails">0</strong> of 5</p>
+  </div>
+
+  <div class="card">
+    <h2>3. Try a login</h2>
+    <form id="check">
+      <input id="typed" name="code" inputmode="numeric" placeholder="Code from your phone" required>
+      <button type="submit">Check code</button>
+    </form>
+    <p id="result" class="note">Type the code from your phone.</p>
+    <button class="light" id="reset" type="button">Reset demo account</button>
+  </div>
+</div>
+
+<script>
+  const step = {{ step }};
+
+  // ask the server for its current code once a second
+  async function refresh() {
+    const data = await (await fetch("{{ url_for('demo_code') }}")).json();
+    document.getElementById("code").textContent = data.code;
+    document.getElementById("seconds").textContent = data.seconds_left;
+    document.getElementById("bar").style.width = (data.seconds_left / step * 100) + "%";
+    document.getElementById("fails").textContent = data.locked ? "5 (locked)" : data.fail_count;
+  }
+  refresh();
+  setInterval(refresh, 1000);
+
+  // send a typed code through the real login check
+  document.getElementById("check").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const body = new FormData(event.target);
+    const data = await (await fetch("{{ url_for('demo_check') }}", {method: "POST", body})).json();
+    const result = document.getElementById("result");
+    result.textContent = data.message;
+    result.className = data.ok ? "ok" : "bad";
+    document.getElementById("typed").value = "";
+    refresh();
+  });
+
+  document.getElementById("reset").addEventListener("click", async () => {
+    await fetch("{{ url_for('demo_reset') }}", {method: "POST"});
+    const result = document.getElementById("result");
+    result.textContent = "Demo account reset.";
+    result.className = "note";
+    refresh();
+  });
+</script>
+{% endblock %}

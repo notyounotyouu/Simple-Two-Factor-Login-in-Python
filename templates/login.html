@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<div class="card">
+  {% if pending %}
+    <h1>Step 2 of 2. Enter your code</h1>
+    <p>Password accepted for <strong>{{ pending }}</strong>. Open Google
+       Authenticator and type the six digit code.</p>
+    <form method="post">
+      <label for="code">Six digit code</label>
+      <input id="code" name="code" inputmode="numeric" pattern="[0-9 ]{6,7}"
+             autocomplete="one-time-code" required autofocus>
+      <button type="submit">Verify</button>
+    </form>
+    <p><a href="{{ url_for('logout') }}">Cancel</a></p>
+  {% else %}
+    <h1>Step 1 of 2. Log in</h1>
+    <form method="post">
+      <label for="username">Username</label>
+      <input id="username" name="username" required autofocus>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required>
+      <button type="submit">Next</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

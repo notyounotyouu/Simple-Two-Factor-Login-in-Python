@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  {% if user %}
+    <h1>Welcome, {{ user }}</h1>
+    <p class="ok">You passed both steps. Password and six digit code.</p>
+    <p><a href="{{ url_for('logout') }}">Log out</a></p>
+  {% else %}
+    <h1>Simple Two Factor Login</h1>
+    <p>This app adds a second step to a password login. After the password,
+       you type a six digit code from Google Authenticator.</p>
+    <p><a href="{{ url_for('signup') }}">Sign up</a>, scan the QR code, then
+       <a href="{{ url_for('login_page') }}">log in</a>. The
+       <a href="{{ url_for('demo') }}">live demo</a> shows how it works.</p>
+  {% endif %}
+</div>
+{% endblock %}

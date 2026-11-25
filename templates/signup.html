@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Sign up{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Sign up</h1>
+  <form method="post">
+    <label for="username">Username</label>
+    <input id="username" name="username" required minlength="3" autofocus>
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" required minlength="8">
+    <p class="note">Use a test password. At least 8 characters.</p>
+    <button type="submit">Create account</button>
+  </form>
+</div>
+{% endblock %}

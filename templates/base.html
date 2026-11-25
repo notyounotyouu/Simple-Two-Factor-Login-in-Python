@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Two Factor Login{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; background: #f3f5f8; color: #1c2430; margin: 0; }
+    nav { background: #14345c; padding: 12px 24px; }
+    nav a { color: #fff; text-decoration: none; margin-right: 20px; font-weight: 600; }
+    main { max-width: 860px; margin: 28px auto; padding: 0 16px; }
+    .card { background: #fff; border-radius: 10px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.12); margin-bottom: 20px; }
+    h1 { margin-top: 0; font-size: 1.5rem; }
+    label { display: block; margin: 12px 0 4px; font-weight: 600; }
+    input { padding: 9px; width: 100%; max-width: 320px; border: 1px solid #b8c1cc; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
+    button { margin-top: 16px; padding: 10px 20px; background: #14345c; color: #fff; border: 0; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+    button.light { background: #6b7a8c; }
+    .flash { background: #fff4d6; border-left: 4px solid #d99a00; padding: 10px 14px; border-radius: 4px; margin-bottom: 16px; }
+    .secret { font-family: Consolas, monospace; letter-spacing: 1px; font-size: .85rem; background: #eef1f5; padding: 4px 8px; border-radius: 4px; word-break: break-all; }
+    .columns { display: flex; gap: 20px; flex-wrap: wrap; }
+    .columns .card { flex: 1; min-width: 200px; text-align: center; }
+    .bigcode { font-family: Consolas, monospace; font-size: 2.6rem; letter-spacing: 6px; margin: 18px 0 10px; }
+    .bar { height: 12px; background: #dde3ea; border-radius: 6px; overflow: hidden; }
+    .bar div { height: 100%; background: #1f8a4c; width: 100%; transition: width .9s linear; }
+    .ok { color: #1f8a4c; font-weight: 700; }
+    .bad { color: #c0392b; font-weight: 700; }
+    .note { color: #5a6675; font-size: .9rem; }
+    img.qr { width: 210px; height: 210px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('signup') }}">Sign up</a>
+    <a href="{{ url_for('login_page') }}">Log in</a>
+    <a href="{{ url_for('demo') }}">Live demo</a>
+  </nav>
+  <main>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
